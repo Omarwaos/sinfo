@@ -173,17 +173,6 @@ public class Buscador extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    private void confirmarActualizacion() {
-        new AlertDialog.Builder(this)
-                .setTitle("Confirmar actualización")
-                .setMessage("¿Estás seguro de guardar los cambios para este alumno?")
-                .setPositiveButton("Actualizar", (dialog, which) -> {
-                    actualizarAlumno();
-                })
-                .setNegativeButton("Cancelar", null)
-                .show();
-    }
-
     private void eliminarAlumno() {
         String id = edtIDBsc.getText().toString().trim();
         if (id.isEmpty()) {
@@ -229,17 +218,6 @@ public class Buscador extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    private void confirmarEliminacion() {
-        new AlertDialog.Builder(this)
-                .setTitle("Confirmar eliminación")
-                .setMessage("¿Estás seguro de que deseas eliminar este alumno? Esta acción no se puede deshacer.")
-                .setPositiveButton("Eliminar", (dialog, which) -> {
-                    eliminarAlumno();
-                })
-                .setNegativeButton("Cancelar", null)
-                .show();
-    }
-
     private void limpiar() {
         edtIDBsc.setText("");
         edtApellidosBsc.setText("");
@@ -248,6 +226,18 @@ public class Buscador extends AppCompatActivity {
         edtDireccionBsc.setText("");
         edtEmailBsc.setText("");
         edtIDBsc.requestFocus();
+    }
+
+    private void validarAccion(String accion){
+        new AlertDialog.Builder(this)
+                .setTitle("Confirmar")
+                .setMessage("¿Estás seguro de "+accion+"?")
+                .setPositiveButton("Si", (dialog, which) -> {
+                    if (accion.equalsIgnoreCase("eliminar")) this.eliminarAlumno();
+                    if (accion.equalsIgnoreCase("actualizar")) this.actualizarAlumno();
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
     }
 
     @Override
@@ -262,14 +252,11 @@ public class Buscador extends AppCompatActivity {
 
         btnReiniciar.setOnClickListener(v -> {
             limpiar();
-            edtIDBsc.setText("");
             Toast.makeText(this, "Formulario reiniciado", Toast.LENGTH_SHORT).show();
         });
 
-        btnActualizar.setOnClickListener(v->{
-            confirmarActualizacion();
-        });
+        btnActualizar.setOnClickListener(v->{this.validarAccion("actualizar");});
 
-        btnEliminar.setOnClickListener(v -> {confirmarEliminacion();});
+        btnEliminar.setOnClickListener(v -> {this.validarAccion("eliminar");});
     }
 }

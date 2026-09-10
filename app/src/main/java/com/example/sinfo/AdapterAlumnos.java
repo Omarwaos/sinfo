@@ -21,7 +21,7 @@ public class AdapterAlumnos extends RecyclerView.Adapter<AdapterAlumnos.ViewHold
     @NonNull
     @Override
     public AdapterAlumnos.ViewHolderDatos onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list, null, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list, parent, false);
         return new ViewHolderDatos(view);
     }
 
@@ -36,7 +36,6 @@ public class AdapterAlumnos extends RecyclerView.Adapter<AdapterAlumnos.ViewHold
         return listAlumnos.size();
     }
 
-    //En esta subclase, gestionaremos cada vista que se renderiza en RV
     public class ViewHolderDatos extends RecyclerView.ViewHolder{
 
         TextView dato;
