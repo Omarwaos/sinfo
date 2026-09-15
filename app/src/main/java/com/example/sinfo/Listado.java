@@ -25,7 +25,7 @@ public class Listado extends AppCompatActivity {
     private RecyclerView recyclerAlumnos;
     private RequestQueue requestQueue;
 
-    private final String URL = "http://192.168.101.15:3000/alumnos";
+    private final String URL = "http://127.0.0.1:3000/alumnos";
 
     private void loadUI() {
         recyclerAlumnos = findViewById(R.id.recyclerAlumnos);
@@ -59,16 +59,26 @@ public class Listado extends AppCompatActivity {
 
     private void renderizarLista(JSONArray jsonArray) {
         try {
-            ArrayList<String> datos = new ArrayList<>();
+            ArrayList<Alumno> listaAlumnos = new ArrayList<>();
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                // Agregamos un espacio entre apellido y nombre
-                datos.add(jsonObject.getString("apellidos") + " " + jsonObject.getString("nombres"));
+
+                int id = jsonObject.optInt("id", 0);
+                String apellidos = jsonObject.optString("apellidos", "");
+                String nombres = jsonObject.optString("nombres", "");
+                String telefono = jsonObject.optString("telefono", "");
+                String direccion = jsonObject.optString("direccion", "");
+                String email = jsonObject.optString("email", "");
+
+                Alumno alumno = new Alumno(apellidos, nombres, telefono, direccion);
+                alumno.setId(id);
+                alumno.setEmail(email);
+
+                listaAlumnos.add(alumno);
             }
 
-            // Usamos TU adaptador personalizado para RecyclerView
-            AdapterAlumnos adapter = new AdapterAlumnos(datos);
+            AdapterAlumnos adapter = new AdapterAlumnos(listaAlumnos);
             recyclerAlumnos.setAdapter(adapter);
 
         } catch (Exception e) {

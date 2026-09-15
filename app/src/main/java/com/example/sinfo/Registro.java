@@ -60,9 +60,6 @@ public class Registro extends AppCompatActivity {
         return true;
     }
 
-    /**
-     * Envía los datos ingresados del formulario a la BD a través del WebService
-     */
 
     //1. Objeto que sirva como canal de comunicacion
 
@@ -70,7 +67,7 @@ public class Registro extends AppCompatActivity {
 
     //2. EndPoint (Dirección que apunta WS)
     //127.0.0.1=Localhost
-    private final String URL= "http://192.168.101.15:3000/alumnos";
+    private final String URL= "http://127.0.0.1:3000/alumnos";
 
     private void registrarAlumno(){
         //Habilitar el canal

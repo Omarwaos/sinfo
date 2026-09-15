@@ -27,13 +27,6 @@
         android:layout_height="wrap_content"/>
 
     <Button
-        android:id="@+id/btnListadoExtra"
-        android:textSize="18dp"
-        android:text="Listado Detallado"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <Button
         android:id="@+id/btnBuscador"
         android:textSize="18dp"
         android:text="Buscador"

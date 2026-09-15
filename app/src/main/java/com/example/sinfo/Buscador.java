@@ -1,6 +1,7 @@
 package com.example.sinfo;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -31,7 +32,9 @@ public class Buscador extends AppCompatActivity {
 
     RequestQueue requestQueue;
 
-    private final String URL="http://192.168.101.15:3000/alumnos";
+    //private final String URL="http://192.168.2.9:3000/alumnos";
+
+    private final String URL = "http://127.0.0.1:3000/alumnos";
 
     private void loadUI(){
 
@@ -51,14 +54,16 @@ public class Buscador extends AppCompatActivity {
     }
 
     private void validarError(int statusCode, String errorJSON){
-        if(statusCode == 404) {
+        if (statusCode == 404) {
             try {
                 JSONObject jsonObject = new JSONObject(errorJSON);
-                String mensajeError = jsonObject.getString("message");
+                String mensajeError = jsonObject.optString("message", "Alumno no encontrado");
                 Toast.makeText(getApplicationContext(), mensajeError, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                Toast.makeText(getApplicationContext(), "Alumno no encontrado (404)", Toast.LENGTH_LONG).show();
             }
+        } else {
+            Toast.makeText(getApplicationContext(), "Error del servidor (Código " + statusCode + ")", Toast.LENGTH_LONG).show();
         }
     }
     private void buscarAlumno(){
@@ -95,16 +100,14 @@ public class Buscador extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        //MANEJO DE ERRORES
-                        //Si el servidor retorna un código 40X (es un error)
+                        Log.e("Buscador", "Detalle del error: ", volleyError); // <--- ESTA LÍNEA MUESTRA EL ERROR EN LOGCAT
                         NetworkResponse response = volleyError.networkResponse;
-                        //Validar si existe un código de error
                         if (response != null && response.data != null) {
-                            //MÁS IMPORTANTE - código de error
                             int statusCode = response.statusCode;
                             String errorJSON = new String(response.data);
                             validarError(statusCode, errorJSON);
-
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Error de conexión con el servidor", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
